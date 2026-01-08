@@ -23,6 +23,7 @@ class BookRepository
                     $book['stock']
                 );
         }
+        return $result;
     }
 
     public function addBook($book){
@@ -32,5 +33,16 @@ class BookRepository
         return $this->pdo->lastInsertId();
     }
 
-    
+    public function findBookByTitle($title) {
+        $stmt = $this->pdo->prepare("SELECT * FROM books INNER JOIN author where title=?");
+        $stmt->execute([$title]);
+        $book = $stmt->fetch();
+        return new Book(
+                    $book['id'],
+                    $book['title'],
+                    new Author($book['authorId'], $book['name']),
+                    $book['price'],
+                    $book['stock']
+                );
+    }
 }
