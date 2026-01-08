@@ -3,7 +3,7 @@
 class BookRepository
 {
     private PDO $pdo;
-    public function __construct(PDO $pdo)
+    public function __construct()
     {
         $this->pdo = Database::connect();
     }
@@ -11,7 +11,7 @@ class BookRepository
     public function getBooks()
     {
         $result = [];
-        $stmt = $this->pdo->prepare("SELECT * FROM books INNER JOIN author where author.id=authorId");
+        $stmt = $this->pdo->prepare("SELECT * FROM books INNER JOIN author on author.id=authorId");
         $stmt->execute();
         foreach ($stmt->fetchAll() as $book) {
             $result[$book['title']] =
@@ -34,7 +34,7 @@ class BookRepository
     }
 
     public function findBookByTitle($title) {
-        $stmt = $this->pdo->prepare("SELECT * FROM books INNER JOIN author where title=?");
+        $stmt = $this->pdo->prepare("SELECT * FROM books INNER JOIN author on author.id=authorId where title=?");
         $stmt->execute([$title]);
         $book = $stmt->fetch();
         return new Book(
