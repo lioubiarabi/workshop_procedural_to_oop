@@ -24,4 +24,13 @@ class BookRepository
                 );
         }
     }
+
+    public function addBook($book){
+        $stmt = $this->pdo->prepare("INSERT into books (title, price, stock, authorId) values(?, ?, ?, ?)");
+        $stmt->execute([$book['title'], $book['price'], $book['stock'], $book['authorId']]);
+
+        return $this->pdo->lastInsertId();
+    }
+
+    
 }
